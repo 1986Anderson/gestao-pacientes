@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #e91e63; /* Rosa para contexto obstétrico */
+            --primary: #e91e63;
             --secondary: #9c27b0;
             --bg: #fdf2f8;
             --white: #ffffff;
@@ -165,7 +165,7 @@
         </div>
 
         <div class="input-box">
-            <label><i class="fas fa-calendar-alt"></i> DUM (Data Últ. Menstruação)</label>
+            <label><i class="fas fa-calendar-alt"></i> DUM (Opcional)</label>
             <input type="date" id="dum" class="input-field">
         </div>
 
@@ -219,13 +219,14 @@
         const dum = document.getElementById('dum').value;
         const status = document.getElementById('status').value;
 
-        if (!nome || !peso || !altura || !dum) {
-            alert("Por favor, preencha todos os campos obrigatórios.");
+        // Apenas Nome, Peso e Altura são obrigatórios agora
+        if (!nome || !peso || !altura) {
+            alert("Por favor, preencha o Nome, Peso e Altura.");
             return;
         }
 
-        // Formatar data para exibição PT-BR
-        const dataFormatada = dum.split('-').reverse().join('/');
+        // Formata a data se preenchida, caso contrário define como "Não informada"
+        const dataFormatada = dum ? dum.split('-').reverse().join('/') : "Não informada";
 
         const novo = {
             "Paciente": nome,
@@ -237,7 +238,6 @@
 
         registros.push(novo);
         
-        // Atualizar Tabela
         const tbody = document.querySelector("#tabelaDados tbody");
         const row = tbody.insertRow();
         row.innerHTML = `
@@ -248,7 +248,7 @@
             <td><span class="status-pill">${status}</span></td>
         `;
 
-        // Limpar
+        // Limpar campos após adicionar[cite: 1, 2]
         document.getElementById('nome').value = '';
         document.getElementById('peso').value = '';
         document.getElementById('altura').value = '';
@@ -263,7 +263,7 @@
         const ws = XLSX.utils.json_to_sheet(registros);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Acompanhamento");
-        XLSX.writeFile(wb, "Relatorio_Pacientes_DUM.xlsx");
+        XLSX.writeFile(wb, "Relatorio_Pacientes.xlsx");
     }
 </script>
 
